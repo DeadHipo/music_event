@@ -7,7 +7,9 @@ const hash = require('../helper/hash');
 const user = require('../model/user');
 
 const loginUrl = 'https://oauth.vk.com/authorize?client_id=' + CONFIG.VK_APP_ID + '&redirect_uri=%s&scope=audio,offline&response_type=code&v=' + CONFIG.VK_API_VERSION;
+
 const redirectUrl = CONFIG.URL + '/api/login?id=%s&hash=%s';
+const hash = require('../helper/hash');
 
 var HandleServer = function() {
 	this.express = express();
@@ -51,8 +53,9 @@ HandleServer.prototype.setup = function() {
 				if (error) {
 					console.log('!!!!!', error);
 					if (error.error.error_code == 17) {
+						var redirect = urlencode(util.format(redirectUrl, data.id, hash(data.id)));
 						console.log('redirect', error.error.redirect_uri);
-						res.redirect(error.error.redirect_uri);
+						res.redirect(error.error.redirect_uri + '&redirect_uri=' + redirect);
 					}
 					return;
 				}
