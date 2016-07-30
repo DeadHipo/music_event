@@ -100,16 +100,16 @@ Bot.prototype.setup = function() {
         console.log(d);
 
         var id = d.from.id;
+        var msgId = d.message.message_id;
 
         if (BOT.userEvents[id]) {
-
-            //console.log(BOT.userEvents[id].page);
-
             var cmd = d.data;
 
             switch (cmd) {
                 case 'next':
-                    BOT.sendMessageByBot(id, 'next');
+                    BOT.userEvents[id].page += 1;
+                    var event = BOT.userEvents[id].events[BOT.userEvents[id].page];
+                    BOT.editEventMessage(id, msgId, event, null, null);
                 break;
 
                 case 'back':
@@ -143,6 +143,18 @@ Bot.prototype.sendEvent = function(telegramId, event) {
     }
 
     BOT.botApi.sendMessage(telegramId, title + '\n' + date + '\n' + tickets, null, replyMarkup);
+}
+
+Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
+    var title = "🎤 " + event.title;
+    var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
+    var tickets = "💸 " + (event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
+    var msg = title + '\n' + date + '\n' + tickets;
+    var replyMarkup = {
+        inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
+    }
+
+    BOT.botApi.sendMessage(chatId, messageId, msg,  null, replyMarkup); 
 }
 
 module.exports = Bot;
