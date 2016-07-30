@@ -51,8 +51,8 @@ HandleServer.prototype.setup = function() {
 				if (error) {
 					console.log('!!!!!', error);
 					if (error.error_code == 17) {
+						console.log('redirect', error.redirect_uri);
 						res.redirect(error.redirect_uri);
-						return;
 					}
 					return;
 				}
