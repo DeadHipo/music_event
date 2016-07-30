@@ -16,6 +16,7 @@ const UserSchema = new mongoose.Schema({
     code: { type: String, default: "0", index: true },
 	mute: { type: Number, default: 0 },
     artists: [{
+  		title: { type: String, index: true },
     	name: { type: String, index: true },
     	count: { type: Number, index: true, default: 1}
     }],
@@ -94,7 +95,10 @@ User.prototype.fetchArtist = function(callback) {
 
     			async.each(items, function(item, callback) {
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
-    				artists[artist] = (artists[artist] || 0) + 1;
+    				artists[artist] = (artists[artist] || {
+    					count: 0,
+    					title: item.artist
+    				}).count + 1;
     				callback();
     			}, function(error) {
     				console.log("artists save");
@@ -140,8 +144,9 @@ User.prototype.insertArtist = function(artists, callback) {
 		var update = { 
 			$push: {
 				artists: {
+					title: artists[audio].title,
 					name: audio,
-					count: artists[audio]
+					count: artists[audio].count
 				}	
 			}
 		}
