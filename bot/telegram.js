@@ -95,10 +95,10 @@ Bot.prototype.setup = function() {
                         "```", "Markdown");
             break;
         }
-        
-        //console.log(msg);
+    }).on('callback_query', function(d) {
+        console.log(d);
+        BOT.botApi.answerCallbackQuery(d.id);
     });
-
 }
 
 Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
