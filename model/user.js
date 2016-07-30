@@ -94,11 +94,13 @@ User.prototype.fetchArtist = function(callback) {
     			var similarArtist = [];
 
     			async.each(items, function(item, callback) {
+    				var name = item.artist;
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
     				artists[artist] = (artists[artist] || {
     					count: 0,
-    					title: item.artist
+    					title: name
     				}).count + 1;
+    				console.log(artists[artist]);
     				callback();
     			}, function(error) {
     				console.log("artists save");
@@ -145,7 +147,7 @@ User.prototype.insertArtist = function(artists, callback) {
 			$push: {
 				artists: {
 					name: audio,
-					title: "test"/*artists[audio].title*/,
+					title: artists[audio].title,
 					count: artists[audio].count
 				}	
 			}
