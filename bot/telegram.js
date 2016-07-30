@@ -20,6 +20,8 @@ Bot.prototype.botApi = {}
 
 Bot.prototype.setup = function() {
 
+    var send = this.sendMessageByBot;
+
     this.botApi.getMe().then(function(me)
     {
         console.log('Bot started');
@@ -37,7 +39,7 @@ Bot.prototype.setup = function() {
         switch (commands[0]) {
             case '/start':
                 var url = util.format(loginUrl, data.id, hash(data.id));
-                this.sendMessageByBot(data.id, "[Авторизация](" + url + ")", 'Markdown');
+                send(data.id, "[Авторизация](" + url + ")", 'Markdown');
             break;
         }
         
@@ -47,7 +49,7 @@ Bot.prototype.setup = function() {
 }
 
 Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
-    this.botApi.sendMessage(id, message, parseMode, markup);
+    BOT.botApi.sendMessage(id, message, parseMode, markup);
 }
 
 module.exports = Bot;
