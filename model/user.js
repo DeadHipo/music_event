@@ -338,4 +338,30 @@ User.serachEvents = function(telegramId, callback) {
 	});
 }
 
+User.findSimilar = function(events, callback) {
+	var eventForUser = [];
+	async.each(events, function(event, eventHandle) {
+		var query = { "similar_artists.name": event.event.alias }
+		var progection = {"_id" : 1 }
+
+		UserModel.find(query, progection, function(error, users) {
+			if (error) {
+				return eventHandle(error);
+			}
+			async.each(users, function(user, userHandle) {
+				var id =  "user" + user._id.toString();
+				(eventForUser[id] || (eventForUser[id] = new Array())).push(event);
+				userHandle();
+			}, function() {
+				eventHandle();
+			});
+		});
+	}, function(error) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, eventForUser);
+	});
+}
+
 module.exports = User;

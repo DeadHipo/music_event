@@ -11,7 +11,14 @@ var fetch = function() {
 			console.error(error);
 			fetchTimer = setTimeout(fetch, ERROR_DELAY);
 		} else {
-			console.log(events);
+			user.findSimilar(events, function(error, users) {
+				if (error) {
+					console.error(error);
+				} else {
+					//console.log(users);
+					BOT.setEvents(users);
+				}
+			});
 			fetchTimer = setTimeout(fetch, DELAY);
 		}
 	});

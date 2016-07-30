@@ -132,6 +132,28 @@ Bot.prototype.setup = function() {
     });
 }
 
+Bot.prototype.setEvents = function(events) {
+    var userIds = Object.keys(events);
+
+    userIds.forEach(function(user) {
+        var id = user.replace('user', '');
+
+        BOT.userEvents[id] = {
+            page: 0,
+            events: events[user]
+        };
+
+        console.log(BOT.userEvents[id]);
+
+        if (BOT.userEvents[id].events.lengh == 1) {
+            BOT.sendEventFull(id, BOT.userEvents[id].events[0]);
+        } else {
+            BOT.sendEvent(id, BOT.userEvents[id].events[0]);
+        }
+    });
+
+}
+
 Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
     BOT.botApi.sendMessage(id, message, parseMode, markup);
 }
@@ -141,11 +163,15 @@ Bot.prototype.sendEvent = function(telegramId, event) {
     var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var tickets = "💸 " + (event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
 
+    var msg = title + '\n' + date + '\n' + tickets;
+
     var replyMarkup = {
         inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
     }
 
-    BOT.botApi.sendMessage(telegramId, title + '\n' + date + '\n' + tickets, null, replyMarkup);
+    console.log(telegramId);
+
+    BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
 }
 
 Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
