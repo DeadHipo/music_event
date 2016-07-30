@@ -18,10 +18,12 @@ var Bot = function() {
 }
 
 Bot.prototype.botApi = {}
+Bot.prototype.userEvents = [];
 
 Bot.prototype.setup = function() {
 
     var send = this.sendMessageByBot;
+    var userEvents = this.userEvents;
 
     this.botApi.getMe().then(function(me)
     {
@@ -42,6 +44,17 @@ Bot.prototype.setup = function() {
             case '/start':
                 var url = util.format(loginUrl, data.id, hash(data.id));
                 send(data.id, "[Авторизация](" + url + ")", 'Markdown');
+            break;
+
+            case '/events': 
+                user.serachEvents(data.id, function(error, events) {
+                    if (error) {
+                        return console.log(error);
+                    }
+                    userEvents[data.id] = events;
+                    console.log(userEvents);
+                    send(data.id, userEvents[data.id]);
+                });
             break;
 
             case '/top':

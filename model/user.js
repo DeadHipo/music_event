@@ -6,6 +6,7 @@ const util = require('util');
 
 const hash = require('../helper/hash');
 const muzis = require('../muzis/api');
+const event = require('./event');
 
 const redirectUrl =  CONFIG.URL + '/api/login?id=%s&hash=%s';
 const tokenUrl = 'https://oauth.vk.com/access_token?client_id=' + CONFIG.VK_APP_ID + '&client_secret=' + CONFIG.VK_APP_SECRET + '&redirect_uri=%s&code=%s';
@@ -295,6 +296,47 @@ User.topTeenSimilar = function(telegramId, callback) {
         	callback(null, result);
     	}
 	);
+}
+
+User.getUser = function(telegramId, callback) {
+		UserModel.findById(telegramId).exec()
+	.then(function(user) {
+		if (user == null) {
+			return callback('null', null);
+		} else {
+			return callback(null, user);
+		}
+	})
+	.catch(function(error) {
+		console.log(error);
+		throw error;
+	});
+}
+
+User.serachEvents = function(telegramId, callback) {
+
+	var events = [];
+
+	User.getUser(telegramId, function(error, user) {
+		if (error) {
+			return callback(error);
+		}
+
+		async.each(user.artists, function(artist, callback) {
+			event.userSearch(artist, function(error, events) {
+				async.each(events, function(event, callback) {
+					events.pushIfNotExist(event, function(e) {
+						return e._id === event._id;
+					});
+					callback();
+				}, function() {
+					callback();
+				})
+			});
+		}, function() {
+			callback(null, events);
+		});
+	});
 }
 
 module.exports = User;

@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const util = require('util');
 const async = require('async');
 
+const user = require('./user');
+
 const eventUrl = 'http://api.cultserv.ru/jtransport/partner/get_events?category=10&exclude=dates&session=%s';
 
 const EventSchema = new mongoose.Schema({
@@ -94,6 +96,22 @@ Event.fetchEvents = function(callback) {
 				callback(null, fetchedEvents);
 			});	
 		}
+	});
+}
+
+Event.userSearch = function(artist, callback) {
+	var query = {
+		$or: 
+		[
+			{ "event.alias": { $regex : ".*" + artist + ".*"} },
+			{ "event.title": { $regex : ".*" + artist + ".*"} }
+		]
+	}
+	EventModel.find(query, function(error, events) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, events);
 	});
 }
 
