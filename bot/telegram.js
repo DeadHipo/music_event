@@ -48,8 +48,9 @@ Bot.prototype.setup = function() {
                 user.topTeen(data.id, function(error, artists) {
                     var msg = '';
 
-                    async.each(artists, function(artist) {
+                    async.each(artists, function(artist, callback) {
                         msg += artist.name + ' ' + artist.count + '\n';
+                        callback();
                     }, function() {
                         send(data.id, msg);
                     });
