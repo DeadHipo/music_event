@@ -1,6 +1,9 @@
 var TelegramBot = require('node-telegram-bot-api');
 const util = require('util');
 
+const hash = require('../helper/hash');
+const user = require('../model/user');
+
 const token = CONFIG.TELEGRAM_BOT_TOKEN;
 const botOptions = {
     polling: true
