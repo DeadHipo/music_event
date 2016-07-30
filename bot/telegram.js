@@ -67,6 +67,16 @@ Bot.prototype.setup = function() {
                     });
                 });
             break;
+
+            case '/test':
+            send(data.id, "*bold text*\n" +
+                        "_italic text_\n" +
+                        "[text](URL)\n" +
+                        "`inline fixed-width code`\n" +
+                        "```text\n" +
+                        "pre-formatted fixed-width code block\n" +
+                        "```", "Markdown");
+            break;
         }
         
         //console.log(msg);
