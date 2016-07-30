@@ -46,7 +46,8 @@ HandleServer.prototype.setup = function() {
 			if (error) {
 				console.log(error);
 				return res.json( { error: { msg: 'Some is happened' } } );
-			}			
+			}
+			console.log("start fetchArtist");			
 			u.fetchArtist(function(error, what) {
 				if (error) {
 					console.log(error);

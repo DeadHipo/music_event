@@ -68,11 +68,14 @@ User.prototype.getVkToken = function(callback) {
 }
 
 User.prototype.fetchArtist = function(callback) {
+	console.log('fetch');
 
 	var id = this.data._id;
 	var user = this;
 
 	this.getVkToken(function(error, token) {
+
+		console.log(error, token);
 
 		if (error) {
 			return callback(error);
@@ -81,6 +84,9 @@ User.prototype.fetchArtist = function(callback) {
 		var url = util.format(audioUrl, token);
 
 		request(url, function(error, res, body) {
+
+			console.log(error, res, body);
+
 			if (!error && res.statusCode == 200) {
 
     			var json = JSON.parse(body);
@@ -94,16 +100,16 @@ User.prototype.fetchArtist = function(callback) {
     			var similarArtist = [];
 
     			async.each(items, function(item, callback) {
-    				var name = item.artist;
+    				//var name = item.artist;
     				console.log(name);
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
-
+    				/*
     				var obj = {
     					count: 0,
     					title: name
     				}
-
-    				artists[artist] = (artists[artist] || obj).count + 1;
+					*/
+    				artists[artist] = (artists[artist] || 0) + 1;
 
     				callback();
     			}, function(error) {
@@ -151,8 +157,8 @@ User.prototype.insertArtist = function(artists, callback) {
 			$push: {
 				artists: {
 					name: audio,
-					title: artists[audio].title,
-					count: artists[audio].count
+					//title: artists[audio].title,
+					count: artists[audio]//.count
 				}	
 			}
 		}
