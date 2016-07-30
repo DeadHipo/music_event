@@ -78,8 +78,6 @@ User.prototype.fetchArtist = function(callback) {
 
 	this.getVkToken(function(error, token) {
 
-		console.log(error, token);
-
 		if (error) {
 			return callback(error);
 		}
@@ -104,8 +102,7 @@ User.prototype.fetchArtist = function(callback) {
     			var similarArtist = [];
 
     			async.each(items, function(item, callback) {
-    				var name = item.artist;
-    				console.log(name);
+    				var name = item.artist.trim();
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
     				
     				var obj = {
@@ -160,7 +157,6 @@ User.prototype.insertArtist = function(artists, callback) {
 	var options = {}
 
 	async.each(Object.keys(artists), function(audio, asynccallback) {
-		console.log(artists[audio]);
 		var update = { 
 			$push: {
 				artists: {
