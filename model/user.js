@@ -145,7 +145,7 @@ User.prototype.insertArtist = function(artists, callback) {
 			$push: {
 				artists: {
 					name: audio,
-					title: artists[audio].title,
+					title: "test",/*artists[audio].title*/,
 					count: artists[audio].count
 				}	
 			}
