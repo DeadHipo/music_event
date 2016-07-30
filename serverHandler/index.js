@@ -9,8 +9,7 @@ const user = require('../model/user');
 const loginUrl = 'https://oauth.vk.com/authorize?client_id=' + CONFIG.VK_APP_ID + '&redirect_uri=%s&scope=audio,offline&response_type=code&v=' + CONFIG.VK_API_VERSION;
 const redirectUrl = CONFIG.URL + '/api/login?id=%s&hash=%s';
 
-var HandleServer = function(telegramBot) {
-	this.telegramBot = telegramBot;
+var HandleServer = function() {
 	this.express = express();
 	this.setup();
 	this.start();
@@ -21,8 +20,6 @@ HandleServer.prototype.express = {}
 
 
 HandleServer.prototype.setup = function() {
-
-	var telegramBot = this.telegramBot;
 
 	this.express.get('/api', function (req, res) {
 		res.send('Hello from music server api!');
@@ -51,7 +48,11 @@ HandleServer.prototype.setup = function() {
 				return res.json( { error: { msg: 'Some is happened' } } );
 			}			
 			u.fetchArtist(function(error, audio) {
-				telegramBot.sendMessageByBot(data.id, 'Success', null, null);
+				if (error) {
+					console.log(error);
+					return;
+				}
+				BOT.sendMessageByBot(data.id, 'Success', null, null);
 			});
 			res.redirect('tg://resolve?domain=musiceventbot');
 		});
