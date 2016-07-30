@@ -103,7 +103,32 @@ User.prototype.fetchArtist = function(callback) {
   			}
 		});
 	});
+}
 
+User.prototype.insertArtist = function(artists, callback) {
+	var query = { _id: this.data._id }
+	var options = {}
+
+	async.each(Object.keys(artists), function(audio, asynccallback) {
+		
+		var update = { 
+			$push: {
+				artists: {
+					name: audio,
+					count: artists[audio]
+				}	
+			}
+		}
+		
+		UserModel.update(query, update, options, function(error) {
+			if (error) {
+				console.log(error);
+			}
+			asynccallback();
+		});
+	});
+
+	callback();
 }
 
 User.exist = function(id) {
