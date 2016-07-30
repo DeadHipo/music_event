@@ -6,5 +6,5 @@ global.SERVER = new (require('./serverHandler/index'))();
 
 (require('mongoose')).connect('mongodb://localhost/db');
 
-console.log('test1');
+console.log('test2');
 
