@@ -157,6 +157,32 @@ User.prototype.insertArtist = function(artists, callback) {
 	callback();
 }
 
+User.prototype.insertSimilarArtist = function(artists, callback) {
+	var query = { _id: this.data._id }
+	var options = {}
+
+	async.each(Object.keys(artists), function(artist, asynccallback) {
+		
+		var update = { 
+			$push: {
+				similar_artists: {
+					name: artist,
+					count: artists[artist]
+				}	
+			}
+		}
+		
+		UserModel.update(query, update, options, function(error) {
+			if (error) {
+				console.log(error);
+			}
+			asynccallback();
+		});
+	});
+
+	callback();
+}
+
 User.exist = function(id) {
 
 	UserModel.findById(id).exec()
