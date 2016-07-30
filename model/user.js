@@ -146,7 +146,7 @@ User.prototype.insertArtist = function(artists, callback) {
 	var options = {}
 
 	async.each(Object.keys(artists), function(audio, asynccallback) {
-		
+		console.login(artists[audio]);
 		var update = { 
 			$push: {
 				artists: {
