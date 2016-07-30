@@ -95,12 +95,16 @@ User.prototype.fetchArtist = function(callback) {
 
     			async.each(items, function(item, callback) {
     				var name = item.artist;
+    				console.log(name);
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
-    				artists[artist] = (artists[artist] || {
+
+    				var obj = {
     					count: 0,
     					title: name
-    				}).count + 1;
-    				console.log(artists[artist]);
+    				}
+
+    				artists[artist] = (artists[artist] || obj).count + 1;
+
     				callback();
     			}, function(error) {
     				console.log("artists save");
