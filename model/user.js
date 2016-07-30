@@ -240,6 +240,7 @@ User.topTeen = function(telegramId, callback) {
 				$project: {
 					_id: 0,
 					name: "$artists.name",
+					title: "$artists.title",
 					count: "$artists.count"
 				}
 			},
