@@ -49,7 +49,10 @@ HandleServer.prototype.setup = function() {
 			if (error) {
 				console.log(error);
 				return res.json( { error: { msg: 'Some is happened' } } );
-			}
+			}			
+			u.fetchArtist(function(error, audio) {
+				telegramBot.sendMessageByBot(data.id, 'Success', null, null);
+			});
 			res.redirect('tg://resolve?domain=musiceventbot');
 		});
 	});

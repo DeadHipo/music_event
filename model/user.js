@@ -52,7 +52,7 @@ User.prototype.getVkToken = function(callback) {
 	var redirect = urlencode(util.format(redirectUrl, this.data._id, hash(this.data._id)));
 	var url = util.format(tokenUrl, redirect, this.data.code);
 
-	REQUEST(url, function(error, res, body) {
+	request(url, function(error, res, body) {
 		if (!error && res.statusCode == 200) {
     		var json = JSON.parse(body);
 
@@ -77,7 +77,7 @@ User.prototype.fetchArtist = function(callback) {
 
 		var url = util.format(audioUrl, token);
 
-		REQUEST(url, function(error, res, body) {
+		request(url, function(error, res, body) {
 			if (!error && res.statusCode == 200) {
 
     			var json = JSON.parse(body);
