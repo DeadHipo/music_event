@@ -60,7 +60,7 @@ Bot.prototype.setup = function() {
                 user.topTeenSimilar(data.id, function(error, similarArtist) {
                     var msg = '';
                     async.each(similarArtist, function(artist, callback) {
-                        msg += artist.name + ' ' + artist.count + '\n';
+                        msg += artist.title + ' ' + artist.count + '\n';
                         callback();
                     }, function() {
                         send(data.id, msg);

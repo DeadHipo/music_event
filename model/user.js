@@ -109,7 +109,7 @@ User.prototype.fetchArtist = function(callback) {
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
     				
     				var obj = {
-    					count: 0,
+    					count: 1,
     					title: name
     				}
 					
@@ -118,8 +118,6 @@ User.prototype.fetchArtist = function(callback) {
     				} else {
     					artists[artist] = obj;
     				}
-
-    				//artists[artist] = (artists[artist] || obj).count + 1;
 
     				callback();
     			}, function(error) {
