@@ -34,6 +34,8 @@ var User = function(telegramId, vkCode) {
 	}
 }
 
+User.prototype.data = {}
+
 User.prototype.save = function(callback) {
 	var u = new UserModel(this.data);
 	u.save()
@@ -119,4 +121,4 @@ User.exist = function(id) {
 	});
 }
 
-User.prototype.data = {}
+module.exports = User;
