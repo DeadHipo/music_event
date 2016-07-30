@@ -52,6 +52,7 @@ Bot.prototype.setup = function() {
                     if (error) {
                         return console.log(error);
                     }
+
                     userEvents[data.id] = {
                         page: 0,
                         events: events
@@ -97,7 +98,30 @@ Bot.prototype.setup = function() {
         }
     }).on('callback_query', function(d) {
         console.log(d);
-        BOT.botApi.answerCallbackQuery(d.id);
+
+        var id = d.from.id;
+
+        if (BOT.botApi.userEvents[id]) {
+
+            console.log(userEvents[id]);
+
+            var cmd = d.data;
+
+            switch (cmd) {
+                case 'next':
+
+                break;
+
+                case 'back':
+                break;
+
+                case 'more':
+                break;
+            }
+
+        } else {
+            BOT.botApi.answerCallbackQuery(d.id);
+        }
     });
 }
 
