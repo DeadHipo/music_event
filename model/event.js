@@ -99,12 +99,13 @@ Event.fetchEvents = function(callback) {
 	});
 }
 
-Event.userSearch = function(artist, callback) {
+Event.userSearch = function(artist, callback) {	
+	
 	var query = {
 		$or: 
 		[
-			{ "event.alias": { $regex : ".*" + artist + ".*"} },
-			{ "event.title": { $regex : ".*" + artist + ".*"} }
+			{ "event.alias": /*{ $regex: "" + */artist.name/* + "" }*/ },
+			{ "event.alias": /*{ $regex: "" + */artist.name/* + "" }*/ }
 		]
 	}
 	EventModel.find(query, function(error, events) {

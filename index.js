@@ -7,3 +7,4 @@ global.SERVER = new (require('./serverHandler/index'))();
 (require('mongoose')).connect('mongodb://localhost/db');
 
 require('./service/eventService');
+require('./helper/array');

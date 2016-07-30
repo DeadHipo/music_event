@@ -315,26 +315,32 @@ User.getUser = function(telegramId, callback) {
 
 User.serachEvents = function(telegramId, callback) {
 
-	var events = [];
+	var userEvents = [];
 
 	User.getUser(telegramId, function(error, user) {
 		if (error) {
 			return callback(error);
 		}
+		console.log(user._id);
+		async.each(user.artists, function(artist, artistCallback) {
 
-		async.each(user.artists, function(artist, callback) {
 			event.userSearch(artist, function(error, events) {
-				async.each(events, function(event, callback) {
-					events.pushIfNotExist(event, function(e) {
-						return e._id === event._id;
+				if (events.lengh !== 0) {
+					async.each(events, function(event, eventCallback) {
+						userEvents.pushIfNotExist(event, function(e) {
+							return e._id === event._id;
+						});
+						eventCallback();
+
+					}, function() {
+						artistCallback();
 					});
-					callback();
-				}, function() {
-					callback();
-				})
+				} else {
+					artistCallback();
+				}
 			});
 		}, function() {
-			callback(null, events);
+			callback(null, userEvents);
 		});
 	});
 }
