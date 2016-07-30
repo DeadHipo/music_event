@@ -113,7 +113,9 @@ Bot.prototype.setup = function() {
                 break;
 
                 case 'back':
-                    BOT.sendMessageByBot(id, 'back');
+                    BOT.userEvents[id].page -= 1;
+                    var event = BOT.userEvents[id].events[BOT.userEvents[id].page];
+                    BOT.editEventMessage(id, msgId, event, null, null);
                 break;
 
                 case 'more':
@@ -154,7 +156,7 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
         inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
     }
 
-    BOT.botApi.sendMessage(chatId, messageId, msg,  null, replyMarkup); 
+    BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
 }
 
 module.exports = Bot;
