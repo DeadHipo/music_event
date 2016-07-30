@@ -50,10 +50,9 @@ HandleServer.prototype.setup = function() {
 			u.fetchArtist(function(error, what) {
 				if (error) {
 					console.log('!!!!!', error);
-					var json = JSON.parse(error);
-					if (json.error_code == 17) {
-						console.log('redirect', json.redirect_uri);
-						res.redirect(json.redirect_uri);
+					if (error.error.error_code == 17) {
+						console.log('redirect', error.error.redirect_uri);
+						res.redirect(error.error.redirect_uri);
 					}
 					return;
 				}
