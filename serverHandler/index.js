@@ -51,11 +51,13 @@ HandleServer.prototype.setup = function() {
 			u.fetchArtist(function(error, what) {
 				if (error) {
 					console.log('!!!!!', error);
+					/*
 					if (error.error.error_code == 17) {
 						var redirect = urlencode(util.format(redirectUrl, data.id, hash(data.id)));
 						console.log('redirect', error.error.redirect_uri + '&redirect_uri=' + redirect);
 						res.redirect(error.error.redirect_uri + '&redirect_uri=' + redirect);
 					}
+					*/
 					return;
 				}
 				if (what == 1) {
@@ -66,7 +68,7 @@ HandleServer.prototype.setup = function() {
 					BOT.sendMessageByBot(data.id, '?!', null, null);
 				}
 			});
-//			res.redirect('tg://resolve?domain=musiceventbot');
+			res.redirect('tg://resolve?domain=musiceventbot');
 		});
 	});
 
