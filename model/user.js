@@ -56,6 +56,9 @@ User.prototype.getVkToken = function(callback) {
 	var url = util.format(tokenUrl, redirect, this.data.code);
 
 	request(url, function(error, res, body) {
+
+		console.log(error, body);
+
 		if (!error && res.statusCode == 200) {
     		var json = JSON.parse(body);
 
