@@ -47,19 +47,29 @@ Bot.prototype.setup = function() {
             case '/top':
                 user.topTeen(data.id, function(error, artists) {
                     var msg = '';
-
                     async.each(artists, function(artist, callback) {
                         msg += artist.name + ' ' + artist.count + '\n';
                         callback();
                     }, function() {
                         send(data.id, msg);
                     });
+                });
+            break;
 
+            case '/similar':
+                user.topTeenSimilar(data.id, function(error, similarArtist) {
+                    var msg = '';
+                    async.each(similarArtist, function(artist, callback) {
+                        msg += artist.name + ' ' + artist.count + '\n';
+                        callback();
+                    }, function() {
+                        send(data.id, msg);
+                    });
                 });
             break;
         }
         
-        console.log(msg);
+        //console.log(msg);
     });
 
 }

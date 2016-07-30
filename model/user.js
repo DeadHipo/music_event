@@ -5,6 +5,7 @@ const urlencode = require('urlencode');
 const util = require('util');
 
 const hash = require('../helper/hash');
+const muzis = require('../muzis/api');
 
 const redirectUrl =  CONFIG.URL + '/api/login?id=%s&hash=%s';
 const tokenUrl = 'https://oauth.vk.com/access_token?client_id=' + CONFIG.VK_APP_ID + '&client_secret=' + CONFIG.VK_APP_SECRET + '&redirect_uri=%s&code=%s';
@@ -89,6 +90,7 @@ User.prototype.fetchArtist = function(callback) {
     			var items = json.response.items;
 
     			var artists = [];
+    			var similarArtist = [];
 
     			async.each(items, function(item, callback) {
     				var artist = item.artist.trim().toLowerCase().replace(/ /g, '-');
@@ -98,6 +100,30 @@ User.prototype.fetchArtist = function(callback) {
     				console.log("artists save");
 	    			user.insertArtist(artists, function() {
 	   					callback(null, 1);
+	    			});
+    			});
+
+    			async.each(Object.keys(artists), function(item, artistcallback) {
+    				muzis({ name: item }, function(error, similar) {
+    					if (error && !similar) {
+    						artistcallback();
+    					} else if (similar) {
+    						async.each(similar, function(item, similarcallback) {
+    							var  artist_name = item.title.trim().toLowerCase().replace(/ /g, '-');
+    							if (!artists.hasOwnProperty(artist_name)) {
+    								similarArtist[artist_name] = (similarArtist[artist_name] || 0) + 1;
+    							}
+    							similarcallback();
+    						});
+    						artistcallback();
+    					} else {
+    						artistcallback();
+    					}
+    				});
+    			}, function(error) {
+					console.log("similarArtist save", error);
+	    			user.insertSimilarArtist(similarArtist, function() {
+						callback(null, 2);
 	    			});
     			});
   			}
@@ -164,6 +190,44 @@ User.topTeen = function(telegramId, callback) {
 					_id: 0,
 					name: "$artists.name",
 					count: "$artists.count"
+				}
+			},
+			{
+				$sort: {
+					count: -1
+				}
+			},
+			{
+				$limit: 10
+			}
+		], 
+		function (error, result) {
+        	if (error) {
+            	console.log(error);
+            	return callback(error);
+       		}
+        	callback(null, result);
+    	}
+	);
+}
+
+User.topTeenSimilar = function(telegramId, callback) {
+	UserModel.aggregate
+	(
+		[
+			{
+				$match: {
+					_id: telegramId
+				}
+			},
+			{
+				$unwind: "$similar_artists"
+			},
+			{
+				$project: {
+					_id: 0,
+					name: "$similar_artists.name",
+					count: "$similar_artists.count"
 				}
 			},
 			{

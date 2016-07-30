@@ -47,12 +47,18 @@ HandleServer.prototype.setup = function() {
 				console.log(error);
 				return res.json( { error: { msg: 'Some is happened' } } );
 			}			
-			u.fetchArtist(function(error, audio) {
+			u.fetchArtist(function(error, what) {
 				if (error) {
 					console.log(error);
 					return;
 				}
-				BOT.sendMessageByBot(data.id, 'Success', null, null);
+				if (what == 1) {
+					BOT.sendMessageByBot(data.id, 'Artsts save', null, null);
+				} else if (what == 2) {
+					BOT.sendMessageByBot(data.id, 'Similar artists save', null, null);
+				} else {
+					BOT.sendMessageByBot(data.id, '?!', null, null);
+				}
 			});
 			res.redirect('tg://resolve?domain=musiceventbot');
 		});
