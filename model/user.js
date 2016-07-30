@@ -57,7 +57,7 @@ User.prototype.getVkToken = function(callback) {
 
 	request(url, function(error, res, body) {
 
-		console.log(error);
+		console.log(error, body, res);
 
 		if (!error && res.statusCode == 200) {
     		var json = JSON.parse(body);
