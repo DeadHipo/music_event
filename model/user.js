@@ -147,4 +147,42 @@ User.exist = function(id) {
 	});
 }
 
+User.topTeen = function(telegramId) {
+	UserModel.aggregate
+	(
+		[
+			{
+				$match: {
+					_id: telegramId
+				}
+			},
+			{
+				$unwind: "$artists"
+			},
+			{
+				$project: {
+					_id: 0,
+					name: "$artists.name",
+					count: "$artists.count"
+				}
+			},
+			{
+				$sort: {
+					count: -1
+				}
+			},
+			{
+				$limit: 10
+			}
+		], 
+		function (error, result) {
+        	if (error) {
+            	console.log(error);
+            	return callback(error);
+       		}
+        	callback(null, result);
+    	}
+	);
+}
+
 module.exports = User;

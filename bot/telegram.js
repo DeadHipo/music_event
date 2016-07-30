@@ -1,5 +1,6 @@
 var TelegramBot = require('node-telegram-bot-api');
 const util = require('util');
+const async = require('async');
 
 const hash = require('../helper/hash');
 const user = require('../model/user');
@@ -37,9 +38,23 @@ Bot.prototype.setup = function() {
         var commands = msg.text.trim().split(" ");
 
         switch (commands[0]) {
+
             case '/start':
                 var url = util.format(loginUrl, data.id, hash(data.id));
                 send(data.id, "[Авторизация](" + url + ")", 'Markdown');
+            break;
+
+            case '/top':
+                user.topTeen(data.id, function(error, artists) {
+                    var msg = '';
+
+                    async.each(artists, function(artist) {
+                        msg += artist.name + ' ' + artist.count + '\n';
+                    }, function() {
+                        send(data.id, msg);
+                    });
+
+                });
             break;
         }
         
