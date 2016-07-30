@@ -147,7 +147,7 @@ User.exist = function(id) {
 	});
 }
 
-User.topTeen = function(telegramId) {
+User.topTeen = function(telegramId, callback) {
 	UserModel.aggregate
 	(
 		[
