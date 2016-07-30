@@ -64,7 +64,7 @@ HandleServer.prototype.setup = function() {
 					BOT.sendMessageByBot(data.id, '?!', null, null);
 				}
 			});
-			res.redirect('tg://resolve?domain=musiceventbot');
+//			res.redirect('tg://resolve?domain=musiceventbot');
 		});
 	});
 
