@@ -72,8 +72,6 @@ Event.fetchEvents = function(callback) {
 
 	request(url, function(error, res, body) {
 		var json = JSON.parse(body);
-		console.log(json);
-
 		if (json.code == 1) {
 			async.each(json.message, function(event, callback) {
 				var e = new Event(event);
