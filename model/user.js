@@ -58,7 +58,7 @@ User.prototype.getVkToken = function(callback) {
 
 	request(url, function(error, res, body) {
 
-		console.log(error, body, res);
+		console.log(error);
 
 		if (!error && res.statusCode == 200) {
     		var json = JSON.parse(body);
@@ -299,7 +299,7 @@ User.topTeenSimilar = function(telegramId, callback) {
 }
 
 User.getUser = function(telegramId, callback) {
-		UserModel.findById(telegramId).exec()
+	UserModel.findById(telegramId).exec()
 	.then(function(user) {
 		if (user == null) {
 			return callback('null', null);
