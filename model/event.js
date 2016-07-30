@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const util = require('util');
+const async = require('async');
 
 const eventUrl = 'http://api.cultserv.ru/jtransport/partner/get_events?category=10&exclude=dates&session=%s';
 
@@ -68,8 +70,10 @@ Event.fetchEvents = function(callback) {
 	var url = util.format(eventUrl, CONFIG.CULTSERV_API_TOKEN);
 	var fetchedEvents = [];
 
-	RE(url).then(function(body) {
+	request(url, function(error, res, body) {
 		var json = JSON.parse(body);
+		console.log(json);
+
 		if (json.code == 1) {
 			async.each(json.message, function(event, callback) {
 				var e = new Event(event);
@@ -92,9 +96,6 @@ Event.fetchEvents = function(callback) {
 				callback(null, fetchedEvents);
 			});	
 		}
-	})
-	.catch(function(error) {
-		console.error(error);
 	});
 }
 
