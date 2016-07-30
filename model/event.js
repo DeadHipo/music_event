@@ -70,6 +70,7 @@ Event.prototype.save = function(callback) {
 
 Event.fetchEvents = function(callback) {
 	var url = util.format(eventUrl, CONFIG.CULTSERV_API_TOKEN);
+	
 	var fetchedEvents = [];
 
 	request(url, function(error, res, body) {
