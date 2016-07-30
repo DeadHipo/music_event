@@ -113,7 +113,13 @@ User.prototype.fetchArtist = function(callback) {
     					title: name
     				}
 					
-    				artists[artist] = (artists[artist] || obj).count + 1;
+    				if (artists[artist]) {
+    					artists[artist].count += 1;
+    				} else {
+    					artists[artist] = obj;
+    				}
+
+    				//artists[artist] = (artists[artist] || obj).count + 1;
 
     				callback();
     			}, function(error) {
