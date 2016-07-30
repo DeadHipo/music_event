@@ -101,9 +101,11 @@ Bot.prototype.setup = function() {
 
         var id = d.from.id;
 
+        console.log(BOT.botApi.userEvents);
+
         if (BOT.botApi.userEvents[id]) {
 
-            console.log(userEvents[id]);
+            console.log(BOT.botApi.userEvents[id]);
 
             var cmd = d.data;
 
