@@ -119,7 +119,8 @@ Bot.prototype.setup = function() {
                 break;
 
                 case 'more':
-                    BOT.sendMessageByBot(id, 'more');
+                    var event = BOT.userEvents[id].events[BOT.userEvents[id].page];
+                    BOT.sendEventFull(id, event);
                 break;
             }
 
@@ -157,6 +158,23 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
     }
 
     BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
+}
+
+Bot.prototype.sendEventFull = function(telegramId, event) {
+    var url = CONFIG.PONIMINALU_MAIN_URL + event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
+    var title = "🎤 " + event.title;
+    var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
+    var place = "📍 " + event.venue.title;
+    var tickets = "💸 Стоимость билетов от " + event.ticket.min + " до " + event.ticket.max;
+    var photo = CONFIG.PONIMINALU_MEDIA_URL + event.original_image;
+
+    var replyMarkup = {
+        inline_keyboard: [[ { text: "Купить билеты", url: url }]]
+    }
+
+    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + '\n' + photo;
+
+    BOT.botApi.sendMessage(telegramId, msg, 'Markdown', replyMarkup);
 }
 
 module.exports = Bot;
