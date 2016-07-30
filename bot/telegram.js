@@ -1,4 +1,5 @@
 var TelegramBot = require('node-telegram-bot-api');
+const util = require('util');
 
 const token = CONFIG.TELEGRAM_BOT_TOKEN;
 const botOptions = {
