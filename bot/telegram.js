@@ -101,25 +101,27 @@ Bot.prototype.setup = function() {
 
         var id = d.from.id;
 
-        console.log(BOT.userEvents);
-
         if (BOT.userEvents[id]) {
 
-            console.log(BOT.userEvents[id]);
+            //console.log(BOT.userEvents[id].page);
 
             var cmd = d.data;
 
             switch (cmd) {
                 case 'next':
-
+                    BOT.sendMessageByBot(id, 'next');
                 break;
 
                 case 'back':
+                    BOT.sendMessageByBot(id, 'back');
                 break;
 
                 case 'more':
+                    BOT.sendMessageByBot(id, 'more');
                 break;
             }
+
+            BOT.botApi.answerCallbackQuery(d.id);
 
         } else {
             BOT.botApi.answerCallbackQuery(d.id);
