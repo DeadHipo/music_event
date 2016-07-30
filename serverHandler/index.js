@@ -3,6 +3,9 @@ var express = require('express');
 const hash = require('../helper/hash');
 const user = require('../model/user');
 
+const loginUrl = 'https://oauth.vk.com/authorize?client_id=' + CONFIG.VK_APP_ID + '&redirect_uri=%s&scope=audio,offline&response_type=code&v=' + CONFIG.VK_API_VERSION;
+const redirectUrl = CONFIG.URL + '/api/login?id=%s&hash=%s';
+
 var HandleServer = function(telegramBot) {
 	this.telegramBot = telegramBot;
 	this.express = express();

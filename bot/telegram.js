@@ -1,10 +1,11 @@
 var TelegramBot = require('node-telegram-bot-api');
 
 const token = CONFIG.TELEGRAM_BOT_TOKEN;
-
 const botOptions = {
     polling: true
 };
+
+const loginUrl = CONFIG.URL + '/api/oauth?id=%s&hash=%s';
 
 var Bot = function() {
     this.botApi = new TelegramBot(token, botOptions);
@@ -22,17 +23,17 @@ Bot.prototype.setup = function() {
      
     this.botApi.on('text', function(msg)
     {
-        var messageChatId = msg.chat.id;
-        var messageText = msg.text;
-        var messageDate = msg.date;
-        var messageUsr = msg.from.username;
+        var data = {
+            id: msg.chat.id,
+            name: msg.from.first_name
+        }
      
-
         var commands = msg.text.trim().split(" ");
 
         switch (commands[0]) {
             case '/start':
-
+                var url = util.format(loginUrl, data.id, hash(data.id));
+                this.sendMessageByBot(data.id, "[Авторизация](" + url + ")", 'Markdown');
             break;
         }
         
