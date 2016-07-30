@@ -1,5 +1,8 @@
 var express = require('express');
 
+const util = require('util');
+const urlencode = require('urlencode');
+
 const hash = require('../helper/hash');
 const user = require('../model/user');
 
