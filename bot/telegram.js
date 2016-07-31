@@ -201,22 +201,22 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 
     var msg = title + '\n' + date + '\n' + tickets + prefix;
 
-    if (BOT.userEvents[telegramId].page == 0) {
+    if (BOT.userEvents[chatId].page == 0) {
         var replyMarkup = {
             inline_keyboard: [[{ text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
-        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
-    } else if (BOT.userEvents[telegramId].page == BOT.userEvents[telegramId].events.length) {
+        BOT.botApi.sendMessage(chatId, msg, null, replyMarkup);
+    } else if (BOT.userEvents[chatId].page == BOT.userEvents[chatId].events.length) {
         var replyMarkup = {
             inline_keyboard: [[{ text: DICTIONARY.back, callback_data: "back" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
-        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+        BOT.botApi.sendMessage(chatId, msg, null, replyMarkup);
     } else {
         var replyMarkup = {
             inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
 
-        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+        BOT.botApi.sendMessage(chatId, msg, null, replyMarkup);
     }
 }
 
