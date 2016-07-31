@@ -47,7 +47,8 @@ HandleServer.prototype.setup = function() {
 			if (error) {
 				console.log(error);
 				return res.json( { error: { msg: 'Some is happened' } } );
-			}			
+			}		
+			BOT.sendMessageByBot(data.id, DICTIONARY.done, null, null);	
 			u.fetchArtist(function(error, what) {
 				if (error) {
 					console.log('!!!!!', error);
@@ -61,7 +62,7 @@ HandleServer.prototype.setup = function() {
 					return;
 				}
 				if (what == 1) {
-					BOT.sendMessageByBot(data.id, DICTIONARY.done, null, null);
+					//BOT.sendMessageByBot(data.id, DICTIONARY.done, null, null);
 				} else if (what == 2) {
 					//BOT.sendMessageByBot(data.id, 'Similar artists save', null, null);
 				} else {
