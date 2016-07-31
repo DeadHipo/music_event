@@ -168,12 +168,12 @@ Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
 }
 
 Bot.prototype.sendEvent = function(telegramId, event) {
-    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
+    var prefix = (event.type == 1 ? '\n\n' + DICTIONARY.muzisList : '');
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
 
-    var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
+    var msg = title + '\n' + date + '\n' + tickets + prefix;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
@@ -183,12 +183,12 @@ Bot.prototype.sendEvent = function(telegramId, event) {
 }
 
 Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
-    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
+    var prefix = (event.type == 1 ? '\n\n' + DICTIONARY.muzisList : '');
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
 
-    var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
+    var msg = title + '\n' + date + '\n' + tickets + prefix;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
@@ -199,14 +199,14 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
     var url = CONFIG.PONIMINALU_MAIN_URL + event.event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
-    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
+    var prefix = (event.type == 1 ? '\n\n' + DICTIONARY.muzisList : '');
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var place = "📍 " + event.event.venue.title;
     var tickets = "💸 Стоимость билетов от " + event.event.ticket.min + " до " + event.event.ticket.max;
     var photo = CONFIG.PONIMINALU_MEDIA_URL + event.event.original_image;
 
-    var msg = prefix + '\n' + title + '\n' + date + '\n' + place + '\n' + tickets + '\n' + photo;
+    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + prefix + '\n\n' + photo;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.tickets, url: url }]]
