@@ -215,7 +215,7 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 			}
 			asynccallback();
 		});
-		
+
 	}, function() {
 		callback();
 	});
@@ -327,6 +327,58 @@ User.getUser = function(telegramId, callback) {
 		console.log(error);
 		throw error;
 	});
+}
+
+Uset.search = function(name, callback) {
+	var userEvents = [];
+
+	async.parallel({
+			vk: function(callback) {
+				event.correctUserSearch(name, function(error, events) {
+
+					async.each(events, function(event, eventCallback) {
+
+						var obj = {
+							type: 0,
+							event: event
+						}
+
+						userEvents.pushIfNotExist(obj, function(e) {
+							console.log(e.event._id, obj.event._id);
+							return e.event._id === obj.event._id;
+						});
+						eventCallback();
+
+					}, function() {
+						artistCallback();
+					});
+				});
+
+			},
+
+			muzis: function(callback) {
+				
+				event.similarUserSearch(artist, function(error, events) {
+					async.each(events, function(event, eventCallback) {
+
+					var obj = {
+						type: 1,
+						event: event
+					}
+
+					userEvents.pushIfNotExist(obj, function(e) {
+						return e.event._id === obj.event._id;
+					});
+					eventCallback();
+
+					}, function() {
+						artistCallback();
+					});
+				});
+			}
+		}, function() {
+			callback(null, userEvents);
+		});
 }
 
 User.serachEvents = function(telegramId, callback) {

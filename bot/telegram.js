@@ -69,6 +69,23 @@ Bot.prototype.setup = function() {
                 });
             break;
 
+            case '/search':
+                if (commands.length == 2) {
+                    user.search(commands[1], function(error, callback) {
+                        if (error) {
+                            return console.log(error);
+                        }
+                    });
+
+                    userEvents[data.id] = {
+                        page: 0,
+                        events: events
+                    };
+
+                    sendEvent(data.id, events[0]);
+                }
+            break;
+
             case '/top':
                 user.topTeen(data.id, function(error, artists) {
                     var msg = '';
@@ -130,6 +147,7 @@ Bot.prototype.setup = function() {
                     var event = BOT.userEvents[id].events[BOT.userEvents[id].page];
                     BOT.sendEventFull(id, event);
                 break;
+
             }
 
             BOT.botApi.answerCallbackQuery(d.id);
