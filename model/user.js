@@ -334,7 +334,7 @@ User.search = function(name, callback) {
 
 	async.parallel({
 			vk: function(callback) {
-				event.correctUserSearch({
+				event.correctUserSearchRegx({
 					name: name,
 					title: name
 				}, function(error, events) {
@@ -363,7 +363,7 @@ User.search = function(name, callback) {
 
 			},
 			muzis: function(callback) {
-				event.similarUserSearch(name, function(error, events) {
+				event.similarUserSearchRegx(name, function(error, events) {
 
 					if (error) {
 						console.log(error);

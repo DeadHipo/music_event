@@ -134,4 +134,34 @@ Event.similarUserSearch = function(artist, callback) {
 	});
 }
 
+
+Event.correctUserSearchRegx = function(artist, callback) {	
+	
+	var query = {
+		$or: 
+		[
+			{ "event.alias": { $regex: ".*" + artist.name + ".*" } },
+			{ "event.title": { $regex: ".*" + artist.title +  ".*" } }
+		]
+	}
+	EventModel.find(query, function(error, events) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, events);
+	});
+}
+
+Event.similarUserSearchRegx = function(artist, callback) {	
+	
+	var query = { "event.alias": { $regex: ".*" + artist.name + ".*" } }
+	EventModel.find(query, function(error, events) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, events);
+	});
+}
+
+
 module.exports = Event;
