@@ -142,7 +142,7 @@ Event.correctUserSearchRegx = function(artist, callback) {
 		[
 			{ "event.alias": { $regex: ".*" + artist.name + ".*",  $options: "is" } },
 			{ "title": { $regex: ".*" + artist.title +  ".*", $options: "is" } },
-			{ "event.title": { $regex: $regex: ".*" + artist.title +  ".*", $options: "is" } }
+			{ "event.title": { $regex: ".*" + artist.title +  ".*", $options: "is" } }
 		
 	}
 	EventModel.find(query, function(error, events) {
