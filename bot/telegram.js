@@ -229,7 +229,7 @@ Bot.prototype.sendEventFull = function(telegramId, event) {
     var tickets = "💸 Стоимость билетов: от " + event.event.ticket.min + " до " + event.event.ticket.max;
     var photo = CONFIG.PONIMINALU_MEDIA_URL + event.event.original_image;
 
-    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + prefix + '\n\n' + photo;
+    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + /*prefix + */'\n\n' + photo;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.tickets, url: url }]]
