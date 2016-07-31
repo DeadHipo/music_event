@@ -67,8 +67,7 @@ Bot.prototype.setup = function() {
                             page: 0,
                             events: events
                         };
-                        
-                        sendEvents(data.id, events[0]);
+                        userEvents(data.id, events[0]);
                     }
                 });
             break;
@@ -88,7 +87,7 @@ Bot.prototype.setup = function() {
                                 events: events
                             };
                             
-                            sendEvents(data.id, events[0]);
+                            userEvents(data.id, events[0]);
                         }
                     });
                 }
