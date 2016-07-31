@@ -3,7 +3,7 @@ const async = require('async');
 var event = require('../model/event');
 var user = require('../model/user');
 
-const DELAY = 24 * 60 * 60 * 1000;
+const DELAY = /*24 * 60 * */60 * 1000;
 const ERROR_DELAY = 1 * 60 * 60 * 1000;
 const START_DELAY = 1000;
 
