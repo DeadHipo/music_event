@@ -89,7 +89,7 @@ Bot.prototype.setup = function() {
                             
                             sendEvents(data.id, events[0]);
                         } else {
-                            send(data.id, 'Результат не дал поисков.');   
+                            send(data.id, 'Результататов нет.');   
                         }
                     });
                 }
