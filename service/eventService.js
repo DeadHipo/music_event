@@ -45,7 +45,9 @@ var fetch = function() {
 					callback();
 				}, function() {
 					async.each(Object.keys(result.muzis), function(id, callback) {
-						concatArray[id] = concatArray[id].concat(result.muzis[id]);
+						if (concatArray[id]) {
+							concatArray[id] = concatArray[id].concat(result.muzis[id]);
+						}
 						callback();
 					}, function() {
 						BOT.setEvents(concatArray);
