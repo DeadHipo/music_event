@@ -218,12 +218,6 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
         }
         BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
     }
-
-    // var replyMarkup = {
-    //     inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
-    // }
-
-    // BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
 }
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
@@ -240,6 +234,8 @@ Bot.prototype.sendEventFull = function(telegramId, event) {
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.tickets, url: url }]]
     }
+
+    console.log(msg);
 
     BOT.botApi.sendMessage(telegramId, msg, 'Markdown', replyMarkup);
 }
