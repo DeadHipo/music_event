@@ -179,46 +179,43 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 
 	async.each(Object.keys(artists), function(artist, asynccallback) {
 		
+		//muzis.mp3(artist, function(error, song) {
 
+		//	var update = {}
 
-		muzis.mp3(artist, function(error, song) {
+		//	if (!error) {
+		//		var update = { 
+		//			$push: {
+		//				similar_artists: {
+		//					name: artist,
+		//					count: artists[artist],
+		// 					mp3: song
+		// 				}	
+		// 			}
+		// 		}
 
-			var update = {}
-
-			if (!error) {
-				var update = { 
-					$push: {
-						similar_artists: {
-							name: artist,
-							count: artists[artist],
-							mp3: song
-						}	
-					}
-				}
-
-				UserModel.update(query, update, options, function(error) {
-					if (error) {
-						console.log(error);
-					}
-					asynccallback();
-				});
-			} else {
-				var update = { 
-					$push: {
-						similar_artists: {
-							name: artist,
-							count: artists[artist]
-						}	
-					}
-				}
-				UserModel.update(query, update, options, function(error) {
-					if (error) {
-						console.log(error);
-					}
-					asynccallback();
-				});
+		// 		UserModel.update(query, update, options, function(error) {
+		// 			if (error) {
+		// 				console.log(error);
+		// 			}
+		// 			asynccallback();
+		// 		});
+		// 	} else {
+		var update = { 
+			$push: {
+				similar_artists: {
+					name: artist,
+					count: artists[artist]
+				}	
 			}
+		}
+		UserModel.update(query, update, options, function(error) {
+			if (error) {
+				console.log(error);
+			}
+			asynccallback();
 		});
+		
 	}, function() {
 		callback();
 	});

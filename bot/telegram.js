@@ -43,9 +43,14 @@ Bot.prototype.setup = function() {
         switch (commands[0]) {
 
             case '/start':
-                send(data.id, DICTIONARY.welcome);
+                //send(data.id, DICTIONARY.welcome);
                 var url = util.format(loginUrl, data.id, hash(data.id));
-                send(data.id, "[" + DICTIONARY.login + "](" + url + ")", 'Markdown');
+
+                var replyMarkup = {
+                    inline_keyboard: [[ { text: DICTIONARY.login, url: url }]]
+                }
+
+                send(data.id, DICTIONARY.welcome, null, replyMarkup);
             break;
 
             case '/events': 
