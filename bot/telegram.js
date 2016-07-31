@@ -222,14 +222,13 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
     var url = CONFIG.PONIMINALU_MAIN_URL + event.event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
-    var prefix = (event.type == 1 ? '\n\n' + DICTIONARY.muzisList + '\n\n': '\n\n');
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var place = "📍 " + event.event.venue.title;
     var tickets = "💸 Стоимость билетов: от " + event.event.ticket.min + " до " + event.event.ticket.max;
     var photo = CONFIG.PONIMINALU_MEDIA_URL + event.event.original_image;
 
-    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + prefix + photo;
+    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + '\n\n' + photo;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: DICTIONARY.tickets, url: url }]]
