@@ -63,7 +63,7 @@ Bot.prototype.setup = function() {
                     if(events.length == 0) {
                         sendEvent(data.id, events[0]);
                     } else if (events.length != 0) {
-                        userEvents[data.id] = {
+                        BOT.userEvents[data.id] = {
                             page: 0,
                             events: events
                         };
@@ -82,7 +82,7 @@ Bot.prototype.setup = function() {
                         if(events.length == 1) {
                             sendEvent(data.id, events[0]);
                         } else if (events.length != 0) {
-                            userEvents[data.id] = {
+                            BOT.userEvents[data.id] = {
                                 page: 0,
                                 events: events
                             };
