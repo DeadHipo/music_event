@@ -43,8 +43,9 @@ Bot.prototype.setup = function() {
         switch (commands[0]) {
 
             case '/start':
+                send(data.id, DICTIONARY.welcome);
                 var url = util.format(loginUrl, data.id, hash(data.id));
-                send(data.id, "[Авторизация](" + url + ")", 'Markdown');
+                send(data.id, "[" + DICTIONARY.login + "](" + url + ")", 'Markdown');
             break;
 
             case '/events': 
@@ -162,7 +163,7 @@ Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
 }
 
 Bot.prototype.sendEvent = function(telegramId, event) {
-    var prefix = (event.type == 1 ? 'Рекомендация' : 'Не Рекомендация');
+    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
@@ -170,14 +171,14 @@ Bot.prototype.sendEvent = function(telegramId, event) {
     var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
 
     var replyMarkup = {
-        inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
+        inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
     }
 
     BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
 }
 
 Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
-    var prefix = (event.type == 1 ? 'Рекомендация' : 'Не Рекомендация');
+    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
@@ -185,7 +186,7 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
     var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
 
     var replyMarkup = {
-        inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
+        inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
     }
 
     BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
@@ -193,7 +194,7 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
     var url = CONFIG.PONIMINALU_MAIN_URL + event.event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
-    var prefix = (event.type == 1 ? 'Рекомендация' : 'Не Рекомендация');
+    var prefix = (event.type == 1 ? DICTIONARY.muzisList : DICTIONARY.userList);
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var place = "📍 " + event.event.venue.title;
@@ -203,7 +204,7 @@ Bot.prototype.sendEventFull = function(telegramId, event) {
     var msg = prefix + '\n' + title + '\n' + date + '\n' + place + '\n' + tickets + '\n' + photo;
 
     var replyMarkup = {
-        inline_keyboard: [[ { text: "Купить билеты", url: url }]]
+        inline_keyboard: [[ { text: DICTIONARY.tickets, url: url }]]
     }
 
     BOT.botApi.sendMessage(telegramId, msg, 'Markdown', replyMarkup);
