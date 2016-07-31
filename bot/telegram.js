@@ -143,9 +143,9 @@ Bot.prototype.setEvents = function(events) {
             events: events[user]
         };
 
-        console.log(BOT.userEvents[id].events.lengh);
+        console.log(BOT.userEvents[id].events.length);
 
-        if (BOT.userEvents[id].events.lengh == 1) {
+        if (BOT.userEvents[id].events.length == 1) {
             BOT.sendEventFull(id, BOT.userEvents[id].events[0]);
         } else {
             BOT.sendEvent(id, BOT.userEvents[id].events[0]);
