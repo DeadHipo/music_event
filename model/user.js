@@ -186,7 +186,7 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 			var update = {}
 
 			if (!error) {
-				update = { 
+				var update = { 
 					$push: {
 						similar_artists: {
 							name: artist,
@@ -195,8 +195,15 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 						}	
 					}
 				}
+
+				UserModel.update(query, update, options, function(error) {
+					if (error) {
+						console.log(error);
+					}
+					asynccallback();
+				});
 			} else {
-				update = { 
+				var update = { 
 					$push: {
 						similar_artists: {
 							name: artist,
@@ -204,18 +211,17 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 						}	
 					}
 				}
+				UserModel.update(query, update, options, function(error) {
+					if (error) {
+						console.log(error);
+					}
+					asynccallback();
+				});
 			}
 		});
-
-		UserModel.update(query, update, options, function(error) {
-			if (error) {
-				console.log(error);
-			}
-			asynccallback();
-		});
+	}, function() {
+		callback();
 	});
-
-	callback();
 }
 
 User.exist = function(id) {
