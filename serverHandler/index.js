@@ -63,7 +63,10 @@ HandleServer.prototype.setup = function() {
 				}
 				if (what == 1) {
 					user.serachEvents(data.id, function(error, events) {
-						BOT.userEvents[data.id] = events;
+						BOT.userEvents[data.id] = {
+							page: 0,
+            				events: events 
+        				}
 						if (events.length == 1) {
 							BOT.sendEventFull(data.id, events[0]);
 						} else {
