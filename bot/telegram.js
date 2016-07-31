@@ -179,7 +179,7 @@ Bot.prototype.sendEvent = function(telegramId, event) {
             inline_keyboard: [[{ text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
         BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
-    } else if (BOT.userEvents[telegramId].page == BOT.userEvents[telegramId].events.length) {
+    } else if (BOT.userEvents[telegramId].page == BOT.userEvents[telegramId].events.length - 1) {
         var replyMarkup = {
             inline_keyboard: [[{ text: DICTIONARY.back, callback_data: "back" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
@@ -207,7 +207,7 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
             inline_keyboard: [[{ text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
         BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
-    } else if (BOT.userEvents[chatId].page == BOT.userEvents[chatId].events.length) {
+    } else if (BOT.userEvents[chatId].page == BOT.userEvents[chatId].events.length - 1) {
         var replyMarkup = {
             inline_keyboard: [[{ text: DICTIONARY.back, callback_data: "back" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
         }
