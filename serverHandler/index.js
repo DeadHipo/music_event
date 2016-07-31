@@ -62,6 +62,14 @@ HandleServer.prototype.setup = function() {
 					return;
 				}
 				if (what == 1) {
+					user.serachEvents(data.id, function(error, events) {
+						BOT.userEvents[data.id] = events;
+						if (events.length == 1) {
+							BOT.sendEventFull(data.id, events[0]);
+						} else {
+							BOT.sendEvent(data.id, events[0]);
+						}
+					});
 					//BOT.sendMessageByBot(data.id, DICTIONARY.done, null, null);
 				} else if (what == 2) {
 					//BOT.sendMessageByBot(data.id, 'Similar artists save', null, null);
