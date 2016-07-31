@@ -92,6 +92,8 @@ Bot.prototype.setup = function() {
                             send(data.id, 'Результататов нет.');   
                         }
                     });
+                } else {
+                    send (data.id, 'Введите имя исполнителя через пробел после команды.');
                 }
             break;
 
