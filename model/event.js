@@ -140,8 +140,8 @@ Event.correctUserSearchRegx = function(artist, callback) {
 	var query = {
 		$or: 
 		[
-			{ "event.alias": { $regex: "#" + artist.name + "#sUS" } },
-			{ "event.title": { $regex: "#" + artist.title +  "#sUS" } }
+			{ "event.alias": { $regex: "/.*" + artist.name + ".*/i" } },
+			{ "event.title": { $regex: "/.*" + artist.title +  ".*/i" } }
 		]
 	}
 	EventModel.find(query, function(error, events) {
@@ -154,7 +154,7 @@ Event.correctUserSearchRegx = function(artist, callback) {
 
 Event.similarUserSearchRegx = function(artist, callback) {	
 	
-	var query = { "event.alias": { $regex: "#" + artist.name + "#sUS" } }
+	var query = { "event.alias": { $regex: "/.*" + artist.name + ".*/i" } }
 	EventModel.find(query, function(error, events) {
 		if (error) {
 			return callback(error);
