@@ -156,7 +156,6 @@ Bot.prototype.setEvents = function(events) {
         if (BOT.userEvents[id].events.length == 1) {
             BOT.sendEventFull(id, BOT.userEvents[id].events[0]);
         } else {
-            //console.log(BOT.userEvents[id].events[0]);
             BOT.sendEvent(id, BOT.userEvents[id].events[0]);
         }
     });
@@ -175,11 +174,23 @@ Bot.prototype.sendEvent = function(telegramId, event) {
 
     var msg = title + '\n' + date + '\n' + tickets + prefix;
 
-    var replyMarkup = {
-        inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
-    }
+    if (BOT.userEvents[telegramId].page == 0) {
+        var replyMarkup = {
+            inline_keyboard: [[{ text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    } else if (BOT.userEvents[telegramId].page == BOT.userEvents[telegramId].events.length) {
+        var replyMarkup = {
+            inline_keyboard: [[{ text: DICTIONARY.back, callback_data: "back" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    } else {
+        var replyMarkup = {
+            inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
 
-    BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    }
 }
 
 Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
@@ -190,11 +201,23 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 
     var msg = title + '\n' + date + '\n' + tickets + prefix;
 
-    var replyMarkup = {
-        inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
-    }
+    if (BOT.userEvents[telegramId].page == 0) {
+        var replyMarkup = {
+            inline_keyboard: [[{ text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    } else if (BOT.userEvents[telegramId].page == BOT.userEvents[telegramId].events.length) {
+        var replyMarkup = {
+            inline_keyboard: [[{ text: DICTIONARY.back, callback_data: "back" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    } else {
+        var replyMarkup = {
+            inline_keyboard: [[ { text: DICTIONARY.back, callback_data: "back" }, { text: DICTIONARY.forward, callback_data: "next" }], [{ text: DICTIONARY.more, callback_data: "more" }]]
+        }
 
-    BOT.botApi.editMessageText(chatId, messageId, msg,  null, replyMarkup); 
+        BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
+    }
 }
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
@@ -203,7 +226,7 @@ Bot.prototype.sendEventFull = function(telegramId, event) {
     var title = "🎤 " + event.event.title;
     var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
     var place = "📍 " + event.event.venue.title;
-    var tickets = "💸 Стоимость билетов от " + event.event.ticket.min + " до " + event.event.ticket.max;
+    var tickets = "💸 Стоимость билетов: от " + event.event.ticket.min + " до " + event.event.ticket.max;
     var photo = CONFIG.PONIMINALU_MEDIA_URL + event.event.original_image;
 
     var msg = title + '\n' + date + '\n' + place + '\n' + tickets + prefix + '\n\n' + photo;
