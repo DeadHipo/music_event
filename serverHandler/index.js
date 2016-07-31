@@ -61,7 +61,7 @@ HandleServer.prototype.setup = function() {
 					return;
 				}
 				if (what == 1) {
-					BOT.sendMessageByBot(data.id, 'Artsts save', null, null);
+					BOT.sendMessageByBot(data.id, DICTIONARY.done, null, null);
 				} else if (what == 2) {
 					BOT.sendMessageByBot(data.id, 'Similar artists save', null, null);
 				} else {

@@ -64,6 +64,7 @@ var audio = function(param, callback) {
 						console.log(json.error);
 						callback('error');
 					} else {
+						console.log(json.songs[0].file_mp3);
 						callback(null, json.songs[0].file_mp3);
 					}
 				} else {
