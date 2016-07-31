@@ -24,7 +24,7 @@ Bot.prototype.setup = function() {
 
     var send = this.sendMessageByBot;
     var sendEvent = this.sendEventFull;
-    var userEvents = this.userEvents;
+    var sendEvents = this.sendEvent;
 
     this.botApi.getMe().then(function(me)
     {
@@ -67,7 +67,7 @@ Bot.prototype.setup = function() {
                             page: 0,
                             events: events
                         };
-                        userEvents(data.id, events[0]);
+                        sendEvents(data.id, events[0]);
                     }
                 });
             break;
@@ -87,7 +87,7 @@ Bot.prototype.setup = function() {
                                 events: events
                             };
                             
-                            userEvents(data.id, events[0]);
+                            sendEvents(data.id, events[0]);
                         }
                     });
                 }
