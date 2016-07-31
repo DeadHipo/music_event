@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const util = require('util');
 const async = require('async');
 
+
+
 const user = require('./user');
 
 const eventUrl = 'http://api.cultserv.ru/jtransport/partner/get_events?category=10&exclude=dates&session=%s';
@@ -30,6 +32,10 @@ const EventSchema = new mongoose.Schema({
 });
 
 const EventModel = mongoose.model('event', EventSchema);
+
+// EventModel.remove({}, function(err) { 
+//    console.log('collection removed') 
+// });
 
 var Event = function(event) {
 	this.data = {
@@ -100,15 +106,26 @@ Event.fetchEvents = function(callback) {
 	});
 }
 
-Event.userSearch = function(artist, callback) {	
+Event.correctUserSearch = function(artist, callback) {	
 	
 	var query = {
 		$or: 
 		[
 			{ "event.alias": /*{ $regex: "" + */artist.name/* + "" }*/ },
-			{ "event.alias": /*{ $regex: "" + */artist.name/* + "" }*/ }
+			{ "event.title": /*{ $regex: "" + */artist.title/* + "" }*/ }
 		]
 	}
+	EventModel.find(query, function(error, events) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, events);
+	});
+}
+
+Event.similarUserSearch = function(artist, callback) {	
+	
+	var query = { "event.alias": /*{ $regex: "" + */artist.name/* + "" }*/ }
 	EventModel.find(query, function(error, events) {
 		if (error) {
 			return callback(error);

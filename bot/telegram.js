@@ -48,6 +48,7 @@ Bot.prototype.setup = function() {
             break;
 
             case '/events': 
+
                 user.serachEvents(data.id, function(error, events) {
                     if (error) {
                         return console.log(error);
@@ -109,6 +110,7 @@ Bot.prototype.setup = function() {
                 case 'next':
                     BOT.userEvents[id].page += 1;
                     var event = BOT.userEvents[id].events[BOT.userEvents[id].page];
+                    console.log(event);
                     BOT.editEventMessage(id, msgId, event, null, null);
                 break;
 
@@ -137,17 +139,18 @@ Bot.prototype.setEvents = function(events) {
 
     userIds.forEach(function(user) {
         var id = user.replace('user', '');
-
+        //console.log(user);
         BOT.userEvents[id] = {
             page: 0,
             events: events[user]
         };
 
-        console.log(BOT.userEvents[id].events.length);
+        console.log(BOT.userEvents[id]);
 
         if (BOT.userEvents[id].events.length == 1) {
             BOT.sendEventFull(id, BOT.userEvents[id].events[0]);
         } else {
+            //console.log(BOT.userEvents[id].events[0]);
             BOT.sendEvent(id, BOT.userEvents[id].events[0]);
         }
     });
@@ -159,26 +162,28 @@ Bot.prototype.sendMessageByBot = function(id, message, parseMode, markup) {
 }
 
 Bot.prototype.sendEvent = function(telegramId, event) {
-    var title = "🎤 " + event.title;
-    var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
-    var tickets = "💸 " + (event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
+    var prefix = (event.type == 1 ? 'Рекомендация' : 'Не Рекомендация');
+    var title = "🎤 " + event.event.title;
+    var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
+    var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
 
-    var msg = title + '\n' + date + '\n' + tickets;
+    var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
     }
 
-    console.log(telegramId);
-
     BOT.botApi.sendMessage(telegramId, msg, null, replyMarkup);
 }
 
 Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, replyMarkup) {
-    var title = "🎤 " + event.title;
-    var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
-    var tickets = "💸 " + (event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
-    var msg = title + '\n' + date + '\n' + tickets;
+    var prefix = (event.type == 1 ? 'Рекомендация' : 'Не Рекомендация');
+    var title = "🎤 " + event.event.title;
+    var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
+    var tickets = "💸 " + (event.event.ticket.count > 0 ? 'Есть билеты в наличии!' : 'Билетов уже нет');
+
+    var msg = prefix + '\n' + title + '\n' + date + '\n' + tickets;
+
     var replyMarkup = {
         inline_keyboard: [[ { text: "Назад", callback_data: "back" }, { text: "Вперед", callback_data: "next" }], [{ text: "Подробнее", callback_data: "more" }]]
     }
@@ -187,18 +192,18 @@ Bot.prototype.editEventMessage = function(chatId, messageId, event, parseMode, r
 }
 
 Bot.prototype.sendEventFull = function(telegramId, event) {
-    var url = CONFIG.PONIMINALU_MAIN_URL + event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
-    var title = "🎤 " + event.title;
-    var date = "🗓 " + new Date(event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
-    var place = "📍 " + event.venue.title;
-    var tickets = "💸 Стоимость билетов от " + event.ticket.min + " до " + event.ticket.max;
-    var photo = CONFIG.PONIMINALU_MEDIA_URL + event.original_image;
+    var url = CONFIG.PONIMINALU_MAIN_URL + event.event.event.link + '?promote=9324844f08cc81d23bc0a995e1be2805';
+    var title = "🎤 " + event.event.title;
+    var date = "🗓 " + new Date(event.event.date_time).toISOString().replace(/T/, ' ').replace(/\..+/, '').replace(' ', ' в ');
+    var place = "📍 " + event.event.venue.title;
+    var tickets = "💸 Стоимость билетов от " + event.event.ticket.min + " до " + event.event.ticket.max;
+    var photo = CONFIG.PONIMINALU_MEDIA_URL + event.event.original_image;
+
+    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + '\n' + photo;
 
     var replyMarkup = {
         inline_keyboard: [[ { text: "Купить билеты", url: url }]]
     }
-
-    var msg = title + '\n' + date + '\n' + place + '\n' + tickets + '\n' + photo;
 
     BOT.botApi.sendMessage(telegramId, msg, 'Markdown', replyMarkup);
 }

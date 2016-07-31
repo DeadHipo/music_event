@@ -315,23 +315,61 @@ User.serachEvents = function(telegramId, callback) {
 			return callback(error);
 		}
 		console.log(user._id);
-		async.each(user.artists, function(artist, artistCallback) {
 
-			event.userSearch(artist, function(error, events) {
-				if (events.lengh !== 0) {
-					async.each(events, function(event, eventCallback) {
-						userEvents.pushIfNotExist(event, function(e) {
-							return e._id === event._id;
+
+		async.parallel({
+			vk: function(callback) {
+
+				async.each(user.artists, function(artist, artistCallback) {
+
+					event.correctUserSearch(artist, function(error, events) {
+
+						async.each(events, function(event, eventCallback) {
+
+							var obj = {
+								type: 0,
+								event: event
+							}
+
+							userEvents.pushIfNotExist(obj, function(e) {
+								console.log(e.event._id, obj.event._id);
+								return e.event._id === obj.event._id;
+							});
+							eventCallback();
+
+						}, function() {
+							artistCallback();
+						});
+					});
+
+				}, function() {
+					callback();
+				});
+			},
+
+			muzis: function(callback) {
+				async.each(user.similar_artists, function(artist, artistCallback) {
+					event.similarUserSearch(artist, function(error, events) {
+						async.each(events, function(event, eventCallback) {
+
+						var obj = {
+							type: 1,
+							event: event
+						}
+
+						userEvents.pushIfNotExist(obj, function(e) {
+							return e.event._id === obj.event._id;
 						});
 						eventCallback();
 
-					}, function() {
-						artistCallback();
+						}, function() {
+							artistCallback();
+						});
 					});
-				} else {
-					artistCallback();
-				}
-			});
+				}, function() {
+					callback();
+				});
+			}
 		}, function() {
 			callback(null, userEvents);
 		});
@@ -350,7 +388,39 @@ User.findSimilar = function(events, callback) {
 			}
 			async.each(users, function(user, userHandle) {
 				var id =  "user" + user._id.toString();
-				(eventForUser[id] || (eventForUser[id] = new Array())).push(event);
+				(eventForUser[id] || (eventForUser[id] = new Array())).push({
+					type: 1,
+					event: event
+				});
+				userHandle();
+			}, function() {
+				eventHandle();
+			});
+		});
+	}, function(error) {
+		if (error) {
+			return callback(error);
+		}
+		callback(null, eventForUser);
+	});
+}
+
+User.findCorrect = function(events, callback) {
+	var eventForUser = [];
+	async.each(events, function(event, eventHandle) {
+		var query = { "artists.name": event.event.alias }
+		var progection = {"_id" : 1 }
+
+		UserModel.find(query, progection, function(error, users) {
+			if (error) {
+				return eventHandle(error);
+			}
+			async.each(users, function(user, userHandle) {
+				var id =  "user" + user._id.toString();
+				(eventForUser[id] || (eventForUser[id] = new Array())).push({
+					type: 0,
+					event: event
+				});
 				userHandle();
 			}, function() {
 				eventHandle();
