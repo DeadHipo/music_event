@@ -23,7 +23,7 @@ Bot.prototype.userEvents = [];
 Bot.prototype.setup = function() {
 
     var send = this.sendMessageByBot;
-    var sendEvent = this.sendEvent;
+    var sendEvent = this.sendEventFull;
     var userEvents = this.userEvents;
 
     this.botApi.getMe().then(function(me)
@@ -60,29 +60,37 @@ Bot.prototype.setup = function() {
                         return console.log(error);
                     }
 
-                    userEvents[data.id] = {
-                        page: 0,
-                        events: events
-                    };
-
-                    sendEvent(data.id, events[0]);
+                    if(events.length == 0) {
+                        sendEvent(data.id, events[0]);
+                    } else if (events.length != 0) {
+                        userEvents[data.id] = {
+                            page: 0,
+                            events: events
+                        };
+                        
+                        sendEvents(data.id, events[0]);
+                    }
                 });
             break;
 
             case '/search':
                 if (commands.length == 2) {
-                    user.search(commands[1], function(error, callback) {
+                    user.search(commands[1], function(error, events) {
                         if (error) {
                             return console.log(error);
+                        }                    
+
+                        if(events.length == 1) {
+                            sendEvent(data.id, events[0]);
+                        } else if (events.length != 0) {
+                            userEvents[data.id] = {
+                                page: 0,
+                                events: events
+                            };
+                            
+                            sendEvents(data.id, events[0]);
                         }
                     });
-
-                    userEvents[data.id] = {
-                        page: 0,
-                        events: events
-                    };
-
-                    sendEvent(data.id, events[0]);
                 }
             break;
 

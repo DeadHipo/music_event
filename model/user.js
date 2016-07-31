@@ -329,12 +329,19 @@ User.getUser = function(telegramId, callback) {
 	});
 }
 
-Uset.search = function(name, callback) {
+User.search = function(name, callback) {
 	var userEvents = [];
 
 	async.parallel({
 			vk: function(callback) {
-				event.correctUserSearch(name, function(error, events) {
+				event.correctUserSearch({
+					name: name,
+					title: name
+				}, function(error, events) {
+					if (error) {
+						console.log(error);
+						return callback();
+					}
 
 					async.each(events, function(event, eventCallback) {
 
@@ -350,33 +357,38 @@ Uset.search = function(name, callback) {
 						eventCallback();
 
 					}, function() {
-						artistCallback();
+						callback();
 					});
 				});
 
 			},
-
 			muzis: function(callback) {
-				
-				event.similarUserSearch(artist, function(error, events) {
-					async.each(events, function(event, eventCallback) {
+				event.similarUserSearch(name, function(error, events) {
 
-					var obj = {
-						type: 1,
-						event: event
+					if (error) {
+						console.log(error);
+						return callback();
 					}
 
-					userEvents.pushIfNotExist(obj, function(e) {
-						return e.event._id === obj.event._id;
-					});
-					eventCallback();
+					async.each(events, function(event, eventCallback) {
+
+						var obj = {
+							type: 1,
+							event: event
+						}
+
+						userEvents.pushIfNotExist(obj, function(e) {
+							return e.event._id === obj.event._id;
+						});
+						eventCallback();
 
 					}, function() {
-						artistCallback();
+						callback();
 					});
 				});
 			}
 		}, function() {
+			console.log(userEvents);
 			callback(null, userEvents);
 		});
 }
