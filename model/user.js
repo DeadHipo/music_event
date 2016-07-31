@@ -23,7 +23,8 @@ const UserSchema = new mongoose.Schema({
     }],
     similar_artists: [{
     	name: { type: String, index: true },
-    	count: { type: Number, index: true, default: 1}
+    	count: { type: Number, index: true, default: 1},
+    	mp3: String
     }],
     artists_ready: { type: Number, default: 0 },
     similar_ready: { type: Number, default: 0 }
@@ -178,15 +179,34 @@ User.prototype.insertSimilarArtist = function(artists, callback) {
 
 	async.each(Object.keys(artists), function(artist, asynccallback) {
 		
-		var update = { 
-			$push: {
-				similar_artists: {
-					name: artist,
-					count: artists[artist]
-				}	
+
+
+		muzis.mp3(artist, function(error, song) {
+
+			var update = {}
+
+			if (!error) {
+				update = { 
+					$push: {
+						similar_artists: {
+							name: artist,
+							count: artists[artist],
+							mp3: song
+						}	
+					}
+				}
+			} else {
+				update = { 
+					$push: {
+						similar_artists: {
+							name: artist,
+							count: artists[artist]
+						}	
+					}
+				}
 			}
-		}
-		
+		});
+
 		UserModel.update(query, update, options, function(error) {
 			if (error) {
 				console.log(error);
